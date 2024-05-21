@@ -34,6 +34,8 @@ public class GameManager : MonoBehaviour
     public int currentFloor; //현재 바닥의 수
     public GameObject prefabFloor; //바닥 프리팹
 
+    public Text resultText;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -235,5 +237,28 @@ public class GameManager : MonoBehaviour
                 GameObject obj = Instantiate(prefabEmployee, new Vector2(spotX, spotY), Quaternion.identity);
             }
         }
+    }
+    public void OnClickButton()
+    {
+        // 0부터 1 사이의 랜덤한 값을 생성합니다.
+        float randomValue = Random.value;
+
+        // 50%의 확률로 성공 또는 실패를 결정합니다.
+        if (randomValue < 0.5f)
+        {
+            resultText.text = "성공!";
+            money = money * 2;
+
+        }
+        else
+        {
+            resultText.text = "실패!";
+            money = 0;
+        }
+        Invoke("ResetText", 1f);
+    }
+    void ResetText()
+    {
+        resultText.text = "돈복사 버튼\r\n성공확률 50%";
     }
 }
