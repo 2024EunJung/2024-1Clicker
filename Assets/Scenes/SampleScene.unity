@@ -2850,7 +2850,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed9782f31eedacd42838a4ced6a4f7fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  money: 99999999
+  money: 0
   moneyIncreaseAmount: 10
   textMoney: {fileID: 1773738468}
   prefabMoney: {fileID: 8843941409224795136, guid: d51bc27fb588f684b885735178e9af7e, type: 3}
