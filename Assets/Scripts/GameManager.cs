@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -33,7 +31,9 @@ public class GameManager : MonoBehaviour
     public int floorCapacity; //바닥이 수용 가능한 인원수
     public int currentFloor; //현재 바닥의 수
     public GameObject prefabFloor; //바닥 프리팹
-
+   
+    bool isFever = false;
+    float time;
     // Start is called before the first frame update
     void Start()
     {
@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour
             Load();
             FillEmployee();
         }
+
     }
 
     // Update is called once per frame
@@ -56,12 +57,12 @@ public class GameManager : MonoBehaviour
         ButtonRecuritActiveCheck();
         CreatFloor();
     }
-
+    
     void MoneyIncrease()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if(EventSystem.current.IsPointerOverGameObject() == false)
+            if (EventSystem.current.IsPointerOverGameObject() == false)
             {
                 money += moneyIncreaseAmount;
                 Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -101,18 +102,19 @@ public class GameManager : MonoBehaviour
 
     public void UpgradePrice()
     {
-        if(money >= moneyIncreasePrice)
+        if (money >= moneyIncreasePrice)
         {
             money -= moneyIncreasePrice;
             moneyIncreaseLevel += 1;
             moneyIncreaseAmount += moneyIncreaseLevel * 100;
             moneyIncreasePrice += moneyIncreaseLevel * 500;
         }
+
     }
 
     void ButtonActiveCheck()
     {
-        if(money >= moneyIncreasePrice)
+        if (money >= moneyIncreasePrice)
         {
             buttonPrice.interactable = true;
         }
@@ -149,12 +151,12 @@ public class GameManager : MonoBehaviour
         float spotX = bossSpot.x + (employeeCount % width) * space;
         float spotY = bossSpot.y - (employeeCount / width) * space;
 
-        Instantiate(prefabEmployee, new Vector2(spotX, spotY),Quaternion.identity);
+        Instantiate(prefabEmployee, new Vector2(spotX, spotY), Quaternion.identity);
     }
 
     public void Recruit()
     {
-        if(money >= AutoWork.autoIncreasePrice)
+        if (money >= AutoWork.autoIncreasePrice)
         {
             money -= AutoWork.autoIncreasePrice;
             employeeCount += 1;
@@ -224,16 +226,37 @@ public class GameManager : MonoBehaviour
     {
         GameObject[] employees = GameObject.FindGameObjectsWithTag("Employee");
 
-        if(employeeCount != employees.Length)
+        if (employeeCount != employees.Length)
         {
-            for(int i = employees.Length + 1; i <= employeeCount; i++)
+            for (int i = employees.Length + 1; i <= employeeCount; i++)
             {
                 Vector2 bossSpot = GameObject.Find("Boss").transform.position;
                 float spotX = bossSpot.x + (i % width) * space;
-                float spotY = bossSpot.y - (i/width) * space;
+                float spotY = bossSpot.y - (i / width) * space;
 
                 GameObject obj = Instantiate(prefabEmployee, new Vector2(spotX, spotY), Quaternion.identity);
             }
         }
+
     }
-}
+    void fever()
+    {
+        time += Time.deltaTime;
+        if (time > 30 && time < 40)
+        {
+            money
+        }
+        else if (time > 40)
+        {
+            time = 0;
+        }
+    }
+
+
+
+
+
+
+
+
+    }
