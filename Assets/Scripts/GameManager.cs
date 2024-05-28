@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
+using UnityEditor.Experimental.GraphView;
 
 public class GameManager : MonoBehaviour
 {
@@ -35,16 +35,16 @@ public class GameManager : MonoBehaviour
     public int currentFloor; //현재 바닥의 수
     public GameObject prefabFloor; //바닥 프리팹
 
-    public int BuildingLevel;
-    public long Capacity;
-    public long BuildingPrice;
-    public Text textBuilding;
+    public Text resultText;
 
-    public Button buttonBuilding;
+    public Animator Background;
+    public float backtime;
+
 
     // Start is called before the first frame update
     void Start()
     {
+
         string path = Application.persistentDataPath + "/save.xml";
         if (System.IO.File.Exists(path))
         {
@@ -61,10 +61,9 @@ public class GameManager : MonoBehaviour
         UpdatePanelText();
         ButtonActiveCheck();
         UpdateRecruitPanelText();
-        ButtonRecruitActiveCheck();
-        UpdateBuildingPanelText();
-        ButtonBuildingActiveCheck();
-        CreateFloor();
+        ButtonRecuritActiveCheck();
+        CreatFloor();
+        Vack();
     }
 
     void MoneyIncrease()
@@ -134,18 +133,16 @@ public class GameManager : MonoBehaviour
 
     void UpdateRecruitPanelText()
     {
-        textRecruit.text = "Lv." + employeeCount + "단가 상승\n\n";
-        textRecruit.text += "직원 1초 당 단가>\n";
-        textRecruit.text += AutoWork.autoMoneyIncreaseAmount.ToString("###,###") + " 원\n";
-        textRecruit.text += "업그레이드 가격>\n";
+        textRecruit.text = "Lv." + employeeCount + " 직원 고용\n\n";
+        textRecruit.text += "직원 1초 당 단가> \n";
+        textRecruit.text += AutoWork.autoMoneyIncreaseAmount.ToString("###,###") + "원 \n";
+        textRecruit.text += "업그레이드 가격> \n";
         textRecruit.text += AutoWork.autoIncreasePrice.ToString("###,###") + " 원\n";
-        textRecruit.text += "고용 가능 직원>\n";
-        textRecruit.text += Capacity.ToString() + " 명";
     }
 
-    void ButtonRecruitActiveCheck()
+    void ButtonRecuritActiveCheck()
     {
-        if (money >= AutoWork.autoIncreasePrice && Capacity > employeeCount)
+        if (money >= AutoWork.autoIncreasePrice)
         {
             buttonRecruit.interactable = true;
         }
@@ -155,37 +152,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void UpdateBuildingPanelText()
-    {
-        textBuilding.text = "Lv." + BuildingLevel + "건물 업그레이드\n\n";
-        textBuilding.text += "건물 수용 인원>\n";
-        textBuilding.text += Capacity.ToString() + " 명\n";
-        textBuilding.text += "업그레이드 가격>\n";
-        textBuilding.text += BuildingPrice.ToString("###,###") + " 원";
-    }
-
-    void ButtonBuildingActiveCheck()
-    {
-        if (money >= BuildingPrice)
-        {
-            buttonBuilding.interactable = true;
-        }
-        else
-        {
-            buttonBuilding.interactable = false;
-        }
-    }
-
     void CreateEmployee()
     {
-        if (Capacity > employeeCount)
-        {
-            Vector2 bossSpot = GameObject.Find("Boss").transform.position;
-            float spotX = bossSpot.x + (employeeCount % width) * space;
-            float spotY = bossSpot.y - (employeeCount / width) * space;
+        Vector2 bossSpot = GameObject.Find("Boss").transform.position;
+        float spotX = bossSpot.x + (employeeCount % width) * space;
+        float spotY = bossSpot.y - (employeeCount / width) * space;
 
-            Instantiate(prefabEmployee, new Vector2(spotX, spotY), Quaternion.identity);
-        }
+        Instantiate(prefabEmployee, new Vector2(spotX, spotY),Quaternion.identity);
     }
 
     public void Recruit()
@@ -201,18 +174,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void UpgradeBuilding()
-    {
-        if (money >= BuildingPrice)
-        {
-            money -= BuildingPrice;
-            BuildingLevel += 1;
-            Capacity += 48;
-            BuildingPrice += BuildingPrice * 500;
-        }
-    }
-
-    void CreateFloor()
+    void CreatFloor()
     {
         Vector2 bgPosition = GameObject.Find("Background").transform.position;
 
@@ -231,19 +193,22 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void GameReSet()
+    void Vack()
     {
-        moneyIncreaseAmount = 10;
-        moneyIncreaseLevel = 1;
-        moneyIncreasePrice = 1000;
+        backtime += Time.deltaTime;
 
-        employeeCount = 0;
+        if (backtime > 0 && backtime <100) {
+        Background.SetBool("isday", true);
+        }
 
-        BuildingLevel = 1;
-        Capacity = 0;
-        BuildingPrice = 10000;
-
-        SceneManager.LoadScene(0);
+        if(backtime > 100 && backtime < 200)
+        {
+            Background.SetBool("isday", false);
+        }
+        else if(backtime > 200)
+        {
+            backtime = 0;
+        }
     }
 
     void Save()
@@ -257,9 +222,7 @@ public class GameManager : MonoBehaviour
         saveData.employeeCount = employeeCount;
         saveData.autoMoneyIncreaseAmount = AutoWork.autoMoneyIncreaseAmount;
         saveData.autoIncreasePrice = AutoWork.autoIncreasePrice;
-        saveData.BuildingLevel = BuildingLevel;
-        saveData.Capacity = Capacity;
-        saveData.BuildingPrice = BuildingPrice;
+        saveData.backtime = backtime;
 
         string path = Application.persistentDataPath + "/save.xml";
         XmlManager.XmlSave<SaveData>(saveData, path);
@@ -278,9 +241,7 @@ public class GameManager : MonoBehaviour
         employeeCount = saveData.employeeCount;
         AutoWork.autoMoneyIncreaseAmount = saveData.autoMoneyIncreaseAmount;
         AutoWork.autoIncreasePrice = saveData.autoIncreasePrice;
-        BuildingLevel = saveData.BuildingLevel;
-        Capacity = saveData.Capacity;
-        BuildingPrice = saveData.BuildingPrice;
+        backtime = saveData.backtime;
     }
 
     private void OnApplicationQuit()
@@ -303,5 +264,28 @@ public class GameManager : MonoBehaviour
                 GameObject obj = Instantiate(prefabEmployee, new Vector2(spotX, spotY), Quaternion.identity);
             }
         }
+    }
+    public void OnClickButton()
+    {
+        // 0부터 1 사이의 랜덤한 값을 생성합니다.
+        float randomValue = Random.value;
+
+        // 50%의 확률로 성공 또는 실패를 결정합니다.
+        if (randomValue < 0.5f)
+        {
+            resultText.text = "성공!";
+            money = money * 2;
+
+        }
+        else
+        {
+            resultText.text = "실패!";
+            money = 0;
+        }
+        Invoke("ResetText", 1f);
+    }
+    void ResetText()
+    {
+        resultText.text = "돈복사 버튼\r\n성공확률 50%";
     }
 }
