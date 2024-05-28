@@ -9,4 +9,6 @@ public class SaveData
     public int employeeCount;
     public long autoMoneyIncreaseAmount;
     public long autoIncreasePrice;
+
+    public float backtime;
 }

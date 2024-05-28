@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEditor.Experimental.GraphView;
 
 public class GameManager : MonoBehaviour
 {
@@ -36,9 +37,14 @@ public class GameManager : MonoBehaviour
 
     public Text resultText;
 
+    public Animator Background;
+    public float backtime;
+
+
     // Start is called before the first frame update
     void Start()
     {
+
         string path = Application.persistentDataPath + "/save.xml";
         if (System.IO.File.Exists(path))
         {
@@ -57,6 +63,7 @@ public class GameManager : MonoBehaviour
         UpdateRecruitPanelText();
         ButtonRecuritActiveCheck();
         CreatFloor();
+        Vack();
     }
 
     void MoneyIncrease()
@@ -186,6 +193,24 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void Vack()
+    {
+        backtime += Time.deltaTime;
+
+        if (backtime > 0 && backtime <10) {
+        Background.SetBool("isday", true);
+        }
+
+        if(backtime > 10 && backtime < 20)
+        {
+            Background.SetBool("isday", false);
+        }
+        else if(backtime > 20)
+        {
+            backtime = 0;
+        }
+    }
+
     void Save()
     {
         SaveData saveData = new SaveData();
@@ -197,6 +222,7 @@ public class GameManager : MonoBehaviour
         saveData.employeeCount = employeeCount;
         saveData.autoMoneyIncreaseAmount = AutoWork.autoMoneyIncreaseAmount;
         saveData.autoIncreasePrice = AutoWork.autoIncreasePrice;
+        saveData.backtime = backtime;
 
         string path = Application.persistentDataPath + "/save.xml";
         XmlManager.XmlSave<SaveData>(saveData, path);
@@ -215,6 +241,7 @@ public class GameManager : MonoBehaviour
         employeeCount = saveData.employeeCount;
         AutoWork.autoMoneyIncreaseAmount = saveData.autoMoneyIncreaseAmount;
         AutoWork.autoIncreasePrice = saveData.autoIncreasePrice;
+        backtime = saveData.backtime;
     }
 
     private void OnApplicationQuit()
