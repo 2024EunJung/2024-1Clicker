@@ -34,17 +34,6 @@ public class GameManager : MonoBehaviour
     public int currentFloor; //ÇöÀç ¹Ù´ÚÀÇ ¼ö
     public GameObject prefabFloor; //¹Ù´Ú ÇÁ¸®ÆÕ
 
-    public Image feverImage;
-    public Image feverImageBack;
-    public GameObject feverImageGO;
-    public GameObject feverImageBackGO;
-    public float feverButtonTime = 0;
-    public float feverTime = 10;
-    public bool isFever = false;
-    public RectTransform feverButton;
-    public GameObject feverButtonGO;
-    public float ButtonTime = 0;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -59,21 +48,6 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isFever)
-            feverTime -= Time.deltaTime;
-
-        if (feverTime <= 0 && isFever)
-        {
-            isFever = false;
-            feverImageGO.SetActive(false);
-            feverImageBackGO.SetActive(false);
-            feverButtonTime = 0;
-            ButtonTime = 0;
-            feverButtonGO.SetActive(true);
-        }
-
-        feverImage.fillAmount = feverTime / 10;
-        FeverButton();
         MoneyIncrease();
         ShowInfo();
         UpdatePanelText();
@@ -87,39 +61,13 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (isFever == true)
-            {
-                money += moneyIncreaseAmount * 2;
-                Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                Instantiate(prefabMoney, mousePosition, Quaternion.identity);
-            }
-            else
+            if(EventSystem.current.IsPointerOverGameObject() == false)
             {
                 money += moneyIncreaseAmount;
                 Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 Instantiate(prefabMoney, mousePosition, Quaternion.identity);
             }
         }
-    }
-
-    void FeverButton()
-    {
-        feverButtonTime += Time.deltaTime;
-        if (feverButtonTime >= 30)
-        {
-            ButtonTime = ButtonTime - Time.deltaTime * 100;
-            if (ButtonTime + 1520 >= 1360)
-                feverButton.anchoredPosition = new Vector2(ButtonTime + 1520, feverButton.anchoredPosition.y);
-        }
-    }
-
-    public void Fever()
-    {
-        isFever = true;
-        feverImageGO.SetActive(true);
-        feverImageBackGO.SetActive(true);
-        feverButton.anchoredPosition = new Vector2(1520, feverButton.anchoredPosition.y);
-        feverTime = 10;
     }
 
     void ShowInfo()
@@ -153,7 +101,7 @@ public class GameManager : MonoBehaviour
 
     public void UpgradePrice()
     {
-        if (money >= moneyIncreasePrice)
+        if(money >= moneyIncreasePrice)
         {
             money -= moneyIncreasePrice;
             moneyIncreaseLevel += 1;
@@ -164,7 +112,7 @@ public class GameManager : MonoBehaviour
 
     void ButtonActiveCheck()
     {
-        if (money >= moneyIncreasePrice)
+        if(money >= moneyIncreasePrice)
         {
             buttonPrice.interactable = true;
         }
@@ -201,12 +149,12 @@ public class GameManager : MonoBehaviour
         float spotX = bossSpot.x + (employeeCount % width) * space;
         float spotY = bossSpot.y - (employeeCount / width) * space;
 
-        Instantiate(prefabEmployee, new Vector2(spotX, spotY), Quaternion.identity);
+        Instantiate(prefabEmployee, new Vector2(spotX, spotY),Quaternion.identity);
     }
 
     public void Recruit()
     {
-        if (money >= AutoWork.autoIncreasePrice)
+        if(money >= AutoWork.autoIncreasePrice)
         {
             money -= AutoWork.autoIncreasePrice;
             employeeCount += 1;
@@ -276,13 +224,13 @@ public class GameManager : MonoBehaviour
     {
         GameObject[] employees = GameObject.FindGameObjectsWithTag("Employee");
 
-        if (employeeCount != employees.Length)
+        if(employeeCount != employees.Length)
         {
-            for (int i = employees.Length + 1; i <= employeeCount; i++)
+            for(int i = employees.Length + 1; i <= employeeCount; i++)
             {
                 Vector2 bossSpot = GameObject.Find("Boss").transform.position;
                 float spotX = bossSpot.x + (i % width) * space;
-                float spotY = bossSpot.y - (i / width) * space;
+                float spotY = bossSpot.y - (i/width) * space;
 
                 GameObject obj = Instantiate(prefabEmployee, new Vector2(spotX, spotY), Quaternion.identity);
             }
