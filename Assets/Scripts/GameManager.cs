@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using UnityEngine.SceneManagement;
 using UnityEditor.Experimental.GraphView;
 
 public class GameManager : MonoBehaviour
@@ -14,27 +13,27 @@ public class GameManager : MonoBehaviour
 
     public GameObject prefabMoney;
 
-    public long moneyIncreaseLevel; //Å¬ï¿½ï¿½ ï¿½ï¿½ ï¿½Ü°ï¿½ ï¿½ï¿½ï¿½×·ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½
-    public long moneyIncreasePrice; //ï¿½ï¿½ï¿½×·ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½
-    public Text textPrice; //Ç¥ï¿½ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½Æ®
+    public long moneyIncreaseLevel; //Å¬¸¯ ´ç ´Ü°¡ ¾÷±×·¹ÀÌµå ·¹º§
+    public long moneyIncreasePrice; //¾÷±×·¹ÀÌµå °¡°Ý
+    public Text textPrice; //Ç¥½ÃÇÒ ÅØ½ºÆ®
 
-    public Button buttonPrice; //ï¿½Ü°ï¿½ ï¿½ï¿½ï¿½×·ï¿½ï¿½Ìµï¿½ ï¿½ï¿½Æ°
+    public Button buttonPrice; //´Ü°¡ ¾÷±×·¹ÀÌµå ¹öÆ°
 
-    public int employeeCount; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½)
-    public Text textRecruit; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½Æ®
+    public int employeeCount; //Á÷¿ø ¼ö (·¹º§)
+    public Text textRecruit; //Á÷¿ø °í¿ë ÆÐ³ÎÀÇ ÅØ½ºÆ®
 
-    public Button buttonRecruit; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ ï¿½ï¿½Æ°
+    public Button buttonRecruit; //Á÷¿ø °í¿ë ÆÐ³Î ¹öÆ°
 
-    public int width; //ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
-    public float space; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-    public GameObject prefabEmployee; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public int width; //°¡·Î ÃÖ´ë Á÷¿ø ¼ö
+    public float space; //Á÷¿ø °£°Ý
+    public GameObject prefabEmployee; //Á÷¿øÇÁ¸®ÆÕ
 
     public Text textPerson;
 
-    public float spaceFloor; //ï¿½Ù´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
-    public int floorCapacity; //ï¿½Ù´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î¿ï¿½ï¿½ï¿½
-    public int currentFloor; //ï¿½ï¿½ï¿½ï¿½ ï¿½Ù´ï¿½ï¿½ï¿½ ï¿½ï¿½
-    public GameObject prefabFloor; //ï¿½Ù´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public float spaceFloor; //¹Ù´ÚÀÇ °£°Ý
+    public int floorCapacity; //¹Ù´ÚÀÌ ¼ö¿ë °¡´ÉÇÑ ÀÎ¿ø¼ö
+    public int currentFloor; //ÇöÀç ¹Ù´ÚÀÇ ¼ö
+    public GameObject prefabFloor; //¹Ù´Ú ÇÁ¸®ÆÕ
 
     public Text resultText;
 
@@ -84,29 +83,29 @@ public class GameManager : MonoBehaviour
     {
         if (money == 0)
         {
-            textMoney.text = "0ï¿½ï¿½";
+            textMoney.text = "0¿ø";
         }
         else
         {
-            textMoney.text = money.ToString("###,###") + "ï¿½ï¿½";
+            textMoney.text = money.ToString("###,###") + "¿ø";
         }
         if (employeeCount == 0)
         {
-            textPerson.text = "0ï¿½ï¿½";
+            textPerson.text = "0¸í";
         }
         else
         {
-            textPerson.text = employeeCount + "ï¿½ï¿½";
+            textPerson.text = employeeCount + "¸í";
         }
     }
 
     void UpdatePanelText()
     {
-        textPrice.text = "Lv." + moneyIncreaseLevel + "ï¿½Ü°ï¿½ ï¿½ï¿½ï¿½\n\n";
-        textPrice.text += "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ü°ï¿½>\n";
-        textPrice.text += moneyIncreaseAmount.ToString("###,###") + " ï¿½ï¿½\n";
-        textPrice.text += "ï¿½ï¿½ï¿½×·ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½>\n";
-        textPrice.text += moneyIncreasePrice.ToString("###,###") + " ï¿½ï¿½";
+        textPrice.text = "Lv." + moneyIncreaseLevel + "´Ü°¡ »ó½Â\n\n";
+        textPrice.text += "¿ÜÁÖ ´ç ´Ü°¡>\n";
+        textPrice.text += moneyIncreaseAmount.ToString("###,###") + " ¿ø\n";
+        textPrice.text += "¾÷±×·¹ÀÌµå °¡°Ý>\n";
+        textPrice.text += moneyIncreasePrice.ToString("###,###") + " ¿ø";
     }
 
     public void UpgradePrice()
@@ -134,18 +133,16 @@ public class GameManager : MonoBehaviour
 
     void UpdateRecruitPanelText()
     {
-        textRecruit.text = "Lv." + employeeCount + "ï¿½Ü°ï¿½ ï¿½ï¿½ï¿½\n\n";
-        textRecruit.text += "ï¿½ï¿½ï¿½ï¿½ 1ï¿½ï¿½ ï¿½ï¿½ ï¿½Ü°ï¿½>\n";
-        textRecruit.text += AutoWork.autoMoneyIncreaseAmount.ToString("###,###") + " ï¿½ï¿½\n";
-        textRecruit.text += "ï¿½ï¿½ï¿½×·ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½>\n";
-        textRecruit.text += AutoWork.autoIncreasePrice.ToString("###,###") + " ï¿½ï¿½\n";
-        textRecruit.text += "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½>\n";
-        textRecruit.text += Capacity.ToString() + " ï¿½ï¿½";
+        textRecruit.text = "Lv." + employeeCount + " Á÷¿ø °í¿ë\n\n";
+        textRecruit.text += "Á÷¿ø 1ÃÊ ´ç ´Ü°¡> \n";
+        textRecruit.text += AutoWork.autoMoneyIncreaseAmount.ToString("###,###") + "¿ø \n";
+        textRecruit.text += "¾÷±×·¹ÀÌµå °¡°Ý> \n";
+        textRecruit.text += AutoWork.autoIncreasePrice.ToString("###,###") + " ¿ø\n";
     }
 
-    void ButtonRecruitActiveCheck()
+    void ButtonRecuritActiveCheck()
     {
-        if (money >= AutoWork.autoIncreasePrice && Capacity > employeeCount)
+        if (money >= AutoWork.autoIncreasePrice)
         {
             buttonRecruit.interactable = true;
         }
@@ -155,37 +152,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void UpdateBuildingPanelText()
-    {
-        textBuilding.text = "Lv." + BuildingLevel + "ï¿½Ç¹ï¿½ ï¿½ï¿½ï¿½×·ï¿½ï¿½Ìµï¿½\n\n";
-        textBuilding.text += "ï¿½Ç¹ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Î¿ï¿½>\n";
-        textBuilding.text += Capacity.ToString() + " ï¿½ï¿½\n";
-        textBuilding.text += "ï¿½ï¿½ï¿½×·ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½>\n";
-        textBuilding.text += BuildingPrice.ToString("###,###") + " ï¿½ï¿½";
-    }
-
-    void ButtonBuildingActiveCheck()
-    {
-        if (money >= BuildingPrice)
-        {
-            buttonBuilding.interactable = true;
-        }
-        else
-        {
-            buttonBuilding.interactable = false;
-        }
-    }
-
     void CreateEmployee()
     {
-        if (Capacity > employeeCount)
-        {
-            Vector2 bossSpot = GameObject.Find("Boss").transform.position;
-            float spotX = bossSpot.x + (employeeCount % width) * space;
-            float spotY = bossSpot.y - (employeeCount / width) * space;
+        Vector2 bossSpot = GameObject.Find("Boss").transform.position;
+        float spotX = bossSpot.x + (employeeCount % width) * space;
+        float spotY = bossSpot.y - (employeeCount / width) * space;
 
-            Instantiate(prefabEmployee, new Vector2(spotX, spotY), Quaternion.identity);
-        }
+        Instantiate(prefabEmployee, new Vector2(spotX, spotY),Quaternion.identity);
     }
 
     public void Recruit()
@@ -201,18 +174,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void UpgradeBuilding()
-    {
-        if (money >= BuildingPrice)
-        {
-            money -= BuildingPrice;
-            BuildingLevel += 1;
-            Capacity += 48;
-            BuildingPrice += BuildingPrice * 500;
-        }
-    }
-
-    void CreateFloor()
+    void CreatFloor()
     {
         Vector2 bgPosition = GameObject.Find("Background").transform.position;
 
@@ -305,25 +267,25 @@ public class GameManager : MonoBehaviour
     }
     public void OnClickButton()
     {
-        // 0ï¿½ï¿½ï¿½ï¿½ 1 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
+        // 0ºÎÅÍ 1 »çÀÌÀÇ ·£´ýÇÑ °ªÀ» »ý¼ºÇÕ´Ï´Ù.
         float randomValue = Random.value;
 
-        // 50%ï¿½ï¿½ È®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½Ð¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
+        // 50%ÀÇ È®·ü·Î ¼º°ø ¶Ç´Â ½ÇÆÐ¸¦ °áÁ¤ÇÕ´Ï´Ù.
         if (randomValue < 0.5f)
         {
-            resultText.text = "ï¿½ï¿½ï¿½ï¿½!";
+            resultText.text = "¼º°ø!";
             money = money * 2;
 
         }
         else
         {
-            resultText.text = "ï¿½ï¿½ï¿½ï¿½!";
+            resultText.text = "½ÇÆÐ!";
             money = 0;
         }
         Invoke("ResetText", 1f);
     }
     void ResetText()
     {
-        resultText.text = "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°\r\nï¿½ï¿½ï¿½ï¿½È®ï¿½ï¿½ 50%";
+        resultText.text = "µ·º¹»ç ¹öÆ°\r\n¼º°øÈ®·ü 50%";
     }
 }
