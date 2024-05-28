@@ -10,11 +10,5 @@ public class SaveData
     public long autoMoneyIncreaseAmount;
     public long autoIncreasePrice;
 
-<<<<<<< HEAD
     public float backtime;
-=======
-    public int BuildingLevel;
-    public long Capacity;
-    public long BuildingPrice;
->>>>>>> Develop
 }

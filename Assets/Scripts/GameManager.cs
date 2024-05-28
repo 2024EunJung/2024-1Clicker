@@ -3,11 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-<<<<<<< HEAD
 using UnityEditor.Experimental.GraphView;
-=======
-using UnityEngine.SceneManagement;
->>>>>>> Develop
 
 public class GameManager : MonoBehaviour
 {
@@ -39,20 +35,11 @@ public class GameManager : MonoBehaviour
     public int currentFloor; //현재 바닥의 수
     public GameObject prefabFloor; //바닥 프리팹
 
-<<<<<<< HEAD
     public Text resultText;
 
     public Animator Background;
     public float backtime;
 
-=======
-    public int BuildingLevel;
-    public long Capacity;
-    public long BuildingPrice;
-    public Text textBuilding;
-
-    public Button buttonBuilding;
->>>>>>> Develop
 
     // Start is called before the first frame update
     void Start()
@@ -74,16 +61,9 @@ public class GameManager : MonoBehaviour
         UpdatePanelText();
         ButtonActiveCheck();
         UpdateRecruitPanelText();
-<<<<<<< HEAD
         ButtonRecuritActiveCheck();
         CreatFloor();
         Vack();
-=======
-        ButtonRecruitActiveCheck();
-        UpdateBuildingPanelText();
-        ButtonBuildingActiveCheck();
-        CreateFloor();
->>>>>>> Develop
     }
 
     void MoneyIncrease()
@@ -153,18 +133,16 @@ public class GameManager : MonoBehaviour
 
     void UpdateRecruitPanelText()
     {
-        textRecruit.text = "Lv." + employeeCount + "단가 상승\n\n";
-        textRecruit.text += "직원 1초 당 단가>\n";
-        textRecruit.text += AutoWork.autoMoneyIncreaseAmount.ToString("###,###") + " 원\n";
-        textRecruit.text += "업그레이드 가격>\n";
+        textRecruit.text = "Lv." + employeeCount + " 직원 고용\n\n";
+        textRecruit.text += "직원 1초 당 단가> \n";
+        textRecruit.text += AutoWork.autoMoneyIncreaseAmount.ToString("###,###") + "원 \n";
+        textRecruit.text += "업그레이드 가격> \n";
         textRecruit.text += AutoWork.autoIncreasePrice.ToString("###,###") + " 원\n";
-        textRecruit.text += "고용 가능 직원>\n";
-        textRecruit.text += Capacity.ToString() + " 명";
     }
 
-    void ButtonRecruitActiveCheck()
+    void ButtonRecuritActiveCheck()
     {
-        if (money >= AutoWork.autoIncreasePrice && Capacity > employeeCount)
+        if (money >= AutoWork.autoIncreasePrice)
         {
             buttonRecruit.interactable = true;
         }
@@ -174,37 +152,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void UpdateBuildingPanelText()
-    {
-        textBuilding.text = "Lv." + BuildingLevel + "건물 업그레이드\n\n";
-        textBuilding.text += "건물 수용 인원>\n";
-        textBuilding.text += Capacity.ToString() + " 명\n";
-        textBuilding.text += "업그레이드 가격>\n";
-        textBuilding.text += BuildingPrice.ToString("###,###") + " 원";
-    }
-
-    void ButtonBuildingActiveCheck()
-    {
-        if (money >= BuildingPrice)
-        {
-            buttonBuilding.interactable = true;
-        }
-        else
-        {
-            buttonBuilding.interactable = false;
-        }
-    }
-
     void CreateEmployee()
     {
-        if (Capacity > employeeCount)
-        {
-            Vector2 bossSpot = GameObject.Find("Boss").transform.position;
-            float spotX = bossSpot.x + (employeeCount % width) * space;
-            float spotY = bossSpot.y - (employeeCount / width) * space;
+        Vector2 bossSpot = GameObject.Find("Boss").transform.position;
+        float spotX = bossSpot.x + (employeeCount % width) * space;
+        float spotY = bossSpot.y - (employeeCount / width) * space;
 
-            Instantiate(prefabEmployee, new Vector2(spotX, spotY), Quaternion.identity);
-        }
+        Instantiate(prefabEmployee, new Vector2(spotX, spotY),Quaternion.identity);
     }
 
     public void Recruit()
@@ -220,18 +174,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void UpgradeBuilding()
-    {
-        if (money >= BuildingPrice)
-        {
-            money -= BuildingPrice;
-            BuildingLevel += 1;
-            Capacity += 48;
-            BuildingPrice += BuildingPrice * 500;
-        }
-    }
-
-    void CreateFloor()
+    void CreatFloor()
     {
         Vector2 bgPosition = GameObject.Find("Background").transform.position;
 
@@ -250,7 +193,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-<<<<<<< HEAD
     void Vack()
     {
         backtime += Time.deltaTime;
@@ -267,21 +209,6 @@ public class GameManager : MonoBehaviour
         {
             backtime = 0;
         }
-=======
-    public void GameReSet()
-    {
-        moneyIncreaseAmount = 10;
-        moneyIncreaseLevel = 1;
-        moneyIncreasePrice = 1000;
-
-        employeeCount = 0;
-
-        BuildingLevel = 1;
-        Capacity = 0;
-        BuildingPrice = 10000;
-
-        SceneManager.LoadScene(0);
->>>>>>> Develop
     }
 
     void Save()
@@ -295,13 +222,7 @@ public class GameManager : MonoBehaviour
         saveData.employeeCount = employeeCount;
         saveData.autoMoneyIncreaseAmount = AutoWork.autoMoneyIncreaseAmount;
         saveData.autoIncreasePrice = AutoWork.autoIncreasePrice;
-<<<<<<< HEAD
         saveData.backtime = backtime;
-=======
-        saveData.BuildingLevel = BuildingLevel;
-        saveData.Capacity = Capacity;
-        saveData.BuildingPrice = BuildingPrice;
->>>>>>> Develop
 
         string path = Application.persistentDataPath + "/save.xml";
         XmlManager.XmlSave<SaveData>(saveData, path);
@@ -320,13 +241,7 @@ public class GameManager : MonoBehaviour
         employeeCount = saveData.employeeCount;
         AutoWork.autoMoneyIncreaseAmount = saveData.autoMoneyIncreaseAmount;
         AutoWork.autoIncreasePrice = saveData.autoIncreasePrice;
-<<<<<<< HEAD
         backtime = saveData.backtime;
-=======
-        BuildingLevel = saveData.BuildingLevel;
-        Capacity = saveData.Capacity;
-        BuildingPrice = saveData.BuildingPrice;
->>>>>>> Develop
     }
 
     private void OnApplicationQuit()
