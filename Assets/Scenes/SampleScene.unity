@@ -2056,9 +2056,11 @@ MonoBehaviour:
   floorCapacity: 9
   currentFloor: 1
   prefabFloor: {fileID: 1717732664976839680, guid: 352589f764862cd4cb7a0d8a4e39cfe9, type: 3}
-  resultText: {fileID: 1860420391}
-  Background: {fileID: 1665104207}
-  backtime: 0
+  BuildingLevel: 1
+  Capacity: 0
+  BuildingPrice: 10000
+  textBuilding: {fileID: 246969897}
+  buttonBuilding: {fileID: 166561472}
 --- !u!4 &1196388108
 Transform:
   m_ObjectHideFlags: 0
