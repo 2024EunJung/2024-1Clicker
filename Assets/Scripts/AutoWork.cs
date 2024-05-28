@@ -28,10 +28,4 @@ public class AutoWork : MonoBehaviour
             yield return new WaitForSeconds(1);
         }
     }
-
-    public void Reset()
-    {
-        autoMoneyIncreaseAmount = 10;
-        autoIncreasePrice = 1000;
-    }
 }
