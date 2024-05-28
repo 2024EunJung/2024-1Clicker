@@ -197,15 +197,15 @@ public class GameManager : MonoBehaviour
     {
         backtime += Time.deltaTime;
 
-        if (backtime > 0 && backtime <10) {
+        if (backtime > 0 && backtime <100) {
         Background.SetBool("isday", true);
         }
 
-        if(backtime > 10 && backtime < 20)
+        if(backtime > 100 && backtime < 200)
         {
             Background.SetBool("isday", false);
         }
-        else if(backtime > 20)
+        else if(backtime > 200)
         {
             backtime = 0;
         }
