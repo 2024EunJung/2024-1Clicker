@@ -108,7 +108,7 @@ public class GameManager : MonoBehaviour
         if (feverButtonTime >= 30)
         {
             ButtonTime = ButtonTime - Time.deltaTime * 100;
-            if (ButtonTime + 1520 >= 1360)
+            if(ButtonTime + 1520 >= 1360)
                 feverButton.anchoredPosition = new Vector2(ButtonTime + 1520, feverButton.anchoredPosition.y);
         }
     }
@@ -153,7 +153,7 @@ public class GameManager : MonoBehaviour
 
     public void UpgradePrice()
     {
-        if (money >= moneyIncreasePrice)
+        if(money >= moneyIncreasePrice)
         {
             money -= moneyIncreasePrice;
             moneyIncreaseLevel += 1;
@@ -164,7 +164,7 @@ public class GameManager : MonoBehaviour
 
     void ButtonActiveCheck()
     {
-        if (money >= moneyIncreasePrice)
+        if(money >= moneyIncreasePrice)
         {
             buttonPrice.interactable = true;
         }
@@ -201,12 +201,12 @@ public class GameManager : MonoBehaviour
         float spotX = bossSpot.x + (employeeCount % width) * space;
         float spotY = bossSpot.y - (employeeCount / width) * space;
 
-        Instantiate(prefabEmployee, new Vector2(spotX, spotY), Quaternion.identity);
+        Instantiate(prefabEmployee, new Vector2(spotX, spotY),Quaternion.identity);
     }
 
     public void Recruit()
     {
-        if (money >= AutoWork.autoIncreasePrice)
+        if(money >= AutoWork.autoIncreasePrice)
         {
             money -= AutoWork.autoIncreasePrice;
             employeeCount += 1;
@@ -276,13 +276,13 @@ public class GameManager : MonoBehaviour
     {
         GameObject[] employees = GameObject.FindGameObjectsWithTag("Employee");
 
-        if (employeeCount != employees.Length)
+        if(employeeCount != employees.Length)
         {
-            for (int i = employees.Length + 1; i <= employeeCount; i++)
+            for(int i = employees.Length + 1; i <= employeeCount; i++)
             {
                 Vector2 bossSpot = GameObject.Find("Boss").transform.position;
                 float spotX = bossSpot.x + (i % width) * space;
-                float spotY = bossSpot.y - (i / width) * space;
+                float spotY = bossSpot.y - (i/width) * space;
 
                 GameObject obj = Instantiate(prefabEmployee, new Vector2(spotX, spotY), Quaternion.identity);
             }
