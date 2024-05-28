@@ -1,6 +1,8 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour
 {
@@ -31,9 +33,18 @@ public class GameManager : MonoBehaviour
     public int floorCapacity; //바닥이 수용 가능한 인원수
     public int currentFloor; //현재 바닥의 수
     public GameObject prefabFloor; //바닥 프리팹
-   
-    bool isFever = false;
-    float time;
+
+    public Image feverImage;
+    public Image feverImageBack;
+    public GameObject feverImageGO;
+    public GameObject feverImageBackGO;
+    public float feverButtonTime = 0;
+    public float feverTime = 10;
+    public bool isFever = false;
+    public RectTransform feverButton;
+    public GameObject feverButtonGO;
+    public float ButtonTime = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,12 +54,26 @@ public class GameManager : MonoBehaviour
             Load();
             FillEmployee();
         }
-
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (isFever)
+            feverTime -= Time.deltaTime;
+
+        if (feverTime <= 0 && isFever)
+        {
+            isFever = false;
+            feverImageGO.SetActive(false);
+            feverImageBackGO.SetActive(false);
+            feverButtonTime = 0;
+            ButtonTime = 0;
+            feverButtonGO.SetActive(true);
+        }
+
+        feverImage.fillAmount = feverTime / 10;
+        FeverButton();
         MoneyIncrease();
         ShowInfo();
         UpdatePanelText();
@@ -57,18 +82,44 @@ public class GameManager : MonoBehaviour
         ButtonRecuritActiveCheck();
         CreatFloor();
     }
-    
+
     void MoneyIncrease()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if (EventSystem.current.IsPointerOverGameObject() == false)
+            if (isFever == true)
+            {
+                money += moneyIncreaseAmount * 2;
+                Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Instantiate(prefabMoney, mousePosition, Quaternion.identity);
+            }
+            else
             {
                 money += moneyIncreaseAmount;
                 Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 Instantiate(prefabMoney, mousePosition, Quaternion.identity);
             }
         }
+    }
+
+    void FeverButton()
+    {
+        feverButtonTime += Time.deltaTime;
+        if (feverButtonTime >= 30)
+        {
+            ButtonTime = ButtonTime - Time.deltaTime * 100;
+            if (ButtonTime + 1520 >= 1360)
+                feverButton.anchoredPosition = new Vector2(ButtonTime + 1520, feverButton.anchoredPosition.y);
+        }
+    }
+
+    public void Fever()
+    {
+        isFever = true;
+        feverImageGO.SetActive(true);
+        feverImageBackGO.SetActive(true);
+        feverButton.anchoredPosition = new Vector2(1520, feverButton.anchoredPosition.y);
+        feverTime = 10;
     }
 
     void ShowInfo()
@@ -109,7 +160,6 @@ public class GameManager : MonoBehaviour
             moneyIncreaseAmount += moneyIncreaseLevel * 100;
             moneyIncreasePrice += moneyIncreaseLevel * 500;
         }
-
     }
 
     void ButtonActiveCheck()
@@ -237,26 +287,5 @@ public class GameManager : MonoBehaviour
                 GameObject obj = Instantiate(prefabEmployee, new Vector2(spotX, spotY), Quaternion.identity);
             }
         }
-
     }
-    void fever()
-    {
-        time += Time.deltaTime;
-        if (time > 30 && time < 40)
-        {
-            money
-        }
-        else if (time > 40)
-        {
-            time = 0;
-        }
-    }
-
-
-
-
-
-
-
-
-    }
+}
