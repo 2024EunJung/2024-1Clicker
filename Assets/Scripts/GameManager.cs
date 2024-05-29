@@ -13,27 +13,27 @@ public class GameManager : MonoBehaviour
 
     public GameObject prefabMoney;
 
-    public long moneyIncreaseLevel; //Å¬¸¯ ´ç ´Ü°¡ ¾÷±×·¹ÀÌµå ·¹º§
-    public long moneyIncreasePrice; //¾÷±×·¹ÀÌµå °¡°Ý
-    public Text textPrice; //Ç¥½ÃÇÒ ÅØ½ºÆ®
+    public long moneyIncreaseLevel; //Å¬ï¿½ï¿½ ï¿½ï¿½ ï¿½Ü°ï¿½ ï¿½ï¿½ï¿½×·ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½
+    public long moneyIncreasePrice; //ï¿½ï¿½ï¿½×·ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½
+    public Text textPrice; //Ç¥ï¿½ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½Æ®
 
-    public Button buttonPrice; //´Ü°¡ ¾÷±×·¹ÀÌµå ¹öÆ°
+    public Button buttonPrice; //ï¿½Ü°ï¿½ ï¿½ï¿½ï¿½×·ï¿½ï¿½Ìµï¿½ ï¿½ï¿½Æ°
 
-    public int employeeCount; //Á÷¿ø ¼ö (·¹º§)
-    public Text textRecruit; //Á÷¿ø °í¿ë ÆÐ³ÎÀÇ ÅØ½ºÆ®
+    public int employeeCount; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½)
+    public Text textRecruit; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½Æ®
 
-    public Button buttonRecruit; //Á÷¿ø °í¿ë ÆÐ³Î ¹öÆ°
+    public Button buttonRecruit; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ ï¿½ï¿½Æ°
 
-    public int width; //°¡·Î ÃÖ´ë Á÷¿ø ¼ö
-    public float space; //Á÷¿ø °£°Ý
-    public GameObject prefabEmployee; //Á÷¿øÇÁ¸®ÆÕ
+    public int width; //ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
+    public float space; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    public GameObject prefabEmployee; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
     public Text textPerson;
 
-    public float spaceFloor; //¹Ù´ÚÀÇ °£°Ý
-    public int floorCapacity; //¹Ù´ÚÀÌ ¼ö¿ë °¡´ÉÇÑ ÀÎ¿ø¼ö
-    public int currentFloor; //ÇöÀç ¹Ù´ÚÀÇ ¼ö
-    public GameObject prefabFloor; //¹Ù´Ú ÇÁ¸®ÆÕ
+    public float spaceFloor; //ï¿½Ù´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    public int floorCapacity; //ï¿½Ù´ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î¿ï¿½ï¿½ï¿½
+    public int currentFloor; //ï¿½ï¿½ï¿½ï¿½ ï¿½Ù´ï¿½ï¿½ï¿½ ï¿½ï¿½
+    public GameObject prefabFloor; //ï¿½Ù´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
     public int BuildingLevel;
     public long Capacity;
@@ -41,6 +41,17 @@ public class GameManager : MonoBehaviour
     public Text textBuilding;
 
     public Button buttonBuilding;
+
+    public Image feverImage;
+    public Image feverImageBack;
+    public GameObject feverImageGO;
+    public GameObject feverImageBackGO;
+    public float feverButtonTime = 0;
+    public float feverTime = 10;
+    public bool isFever = false;
+    public RectTransform feverButton;
+    public GameObject feverButtonGO;
+    public float ButtonTime = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -56,6 +67,21 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (isFever)
+            feverTime -= Time.deltaTime;
+
+        if (feverTime <= 0 && isFever)
+        {
+            isFever = false;
+            feverImageGO.SetActive(false);
+            feverImageBackGO.SetActive(false);
+            feverButtonTime = 0;
+            ButtonTime = 0;
+            feverButtonGO.SetActive(true);
+        }
+
+        feverImage.fillAmount = feverTime / 10;
+        FeverButton();
         MoneyIncrease();
         ShowInfo();
         UpdatePanelText();
@@ -71,7 +97,13 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            if(EventSystem.current.IsPointerOverGameObject() == false)
+            if (isFever == true)
+            {
+                money += moneyIncreaseAmount * 2;
+                Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                Instantiate(prefabMoney, mousePosition, Quaternion.identity);
+            }
+            else
             {
                 money += moneyIncreaseAmount;
                 Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -80,33 +112,53 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void FeverButton()
+    {
+        feverButtonTime += Time.deltaTime;
+        if (feverButtonTime >= 30)
+        {
+            ButtonTime = ButtonTime - Time.deltaTime * 100;
+            if(ButtonTime + 1520 >= 1360)
+                feverButton.anchoredPosition = new Vector2(ButtonTime + 1520, feverButton.anchoredPosition.y);
+        }
+    }
+
+    public void Fever()
+    {
+        isFever = true;
+        feverImageGO.SetActive(true);
+        feverImageBackGO.SetActive(true);
+        feverButton.anchoredPosition = new Vector2(1520, feverButton.anchoredPosition.y);
+        feverTime = 10;
+    }
+
     void ShowInfo()
     {
         if (money == 0)
         {
-            textMoney.text = "0¿ø";
+            textMoney.text = "0ï¿½ï¿½";
         }
         else
         {
-            textMoney.text = money.ToString("###,###") + "¿ø";
+            textMoney.text = money.ToString("###,###") + "ï¿½ï¿½";
         }
         if (employeeCount == 0)
         {
-            textPerson.text = "0¸í";
+            textPerson.text = "0ï¿½ï¿½";
         }
         else
         {
-            textPerson.text = employeeCount + "¸í";
+            textPerson.text = employeeCount + "ï¿½ï¿½";
         }
     }
 
     void UpdatePanelText()
     {
-        textPrice.text = "Lv." + moneyIncreaseLevel + "´Ü°¡ »ó½Â\n\n";
-        textPrice.text += "¿ÜÁÖ ´ç ´Ü°¡>\n";
-        textPrice.text += moneyIncreaseAmount.ToString("###,###") + " ¿ø\n";
-        textPrice.text += "¾÷±×·¹ÀÌµå °¡°Ý>\n";
-        textPrice.text += moneyIncreasePrice.ToString("###,###") + " ¿ø";
+        textPrice.text = "Lv." + moneyIncreaseLevel + "ï¿½Ü°ï¿½ ï¿½ï¿½ï¿½\n\n";
+        textPrice.text += "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ü°ï¿½>\n";
+        textPrice.text += moneyIncreaseAmount.ToString("###,###") + " ï¿½ï¿½\n";
+        textPrice.text += "ï¿½ï¿½ï¿½×·ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½>\n";
+        textPrice.text += moneyIncreasePrice.ToString("###,###") + " ï¿½ï¿½";
     }
 
     public void UpgradePrice()
@@ -134,13 +186,13 @@ public class GameManager : MonoBehaviour
 
     void UpdateRecruitPanelText()
     {
-        textRecruit.text = "Lv." + employeeCount + "´Ü°¡ »ó½Â\n\n";
-        textRecruit.text += "Á÷¿ø 1ÃÊ ´ç ´Ü°¡>\n";
-        textRecruit.text += AutoWork.autoMoneyIncreaseAmount.ToString("###,###") + " ¿ø\n";
-        textRecruit.text += "¾÷±×·¹ÀÌµå °¡°Ý>\n";
-        textRecruit.text += AutoWork.autoIncreasePrice.ToString("###,###") + " ¿ø\n";
-        textRecruit.text += "°í¿ë °¡´É Á÷¿ø>\n";
-        textRecruit.text += Capacity.ToString() + " ¸í";
+        textRecruit.text = "Lv." + employeeCount + "ï¿½Ü°ï¿½ ï¿½ï¿½ï¿½\n\n";
+        textRecruit.text += "ï¿½ï¿½ï¿½ï¿½ 1ï¿½ï¿½ ï¿½ï¿½ ï¿½Ü°ï¿½>\n";
+        textRecruit.text += AutoWork.autoMoneyIncreaseAmount.ToString("###,###") + " ï¿½ï¿½\n";
+        textRecruit.text += "ï¿½ï¿½ï¿½×·ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½>\n";
+        textRecruit.text += AutoWork.autoIncreasePrice.ToString("###,###") + " ï¿½ï¿½\n";
+        textRecruit.text += "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½>\n";
+        textRecruit.text += Capacity.ToString() + " ï¿½ï¿½";
     }
 
     void ButtonRecruitActiveCheck()
@@ -157,11 +209,11 @@ public class GameManager : MonoBehaviour
 
     void UpdateBuildingPanelText()
     {
-        textBuilding.text = "Lv." + BuildingLevel + "°Ç¹° ¾÷±×·¹ÀÌµå\n\n";
-        textBuilding.text += "°Ç¹° ¼ö¿ë ÀÎ¿ø>\n";
-        textBuilding.text += Capacity.ToString() + " ¸í\n";
-        textBuilding.text += "¾÷±×·¹ÀÌµå °¡°Ý>\n";
-        textBuilding.text += BuildingPrice.ToString("###,###") + " ¿ø";
+        textBuilding.text = "Lv." + BuildingLevel + "ï¿½Ç¹ï¿½ ï¿½ï¿½ï¿½×·ï¿½ï¿½Ìµï¿½\n\n";
+        textBuilding.text += "ï¿½Ç¹ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Î¿ï¿½>\n";
+        textBuilding.text += Capacity.ToString() + " ï¿½ï¿½\n";
+        textBuilding.text += "ï¿½ï¿½ï¿½×·ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½>\n";
+        textBuilding.text += BuildingPrice.ToString("###,###") + " ï¿½ï¿½";
     }
 
     void ButtonBuildingActiveCheck()
